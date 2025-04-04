@@ -69,8 +69,11 @@ class NotesEntry extends StatelessWidget {
     return GestureDetector(
       child: Container(
           decoration: ShapeDecoration(
-              shape: Border.all(width: 16, color: color) +
-                  Border.all(width: 4,  color: model.color == color ? color : Theme.of(context).canvasColor)
+              shape: Border.all(
+                  width: 16,
+                  color: color
+              ),
+              color: model.color == color ? color : Theme.of(context).canvasColor
           )
       ),
       onTap: () {

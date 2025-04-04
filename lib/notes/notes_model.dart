@@ -6,7 +6,7 @@ final NotesModel notesModel = NotesModel();  // to be used by UI
 class Note {
   String? title;
   String? content;
-  Color? color;
+  Color color = Colors.white;
 
   static List<Color> get allColors => _colorMap.values.toList();
 
@@ -63,7 +63,7 @@ class NotesModel extends Model {
 
   set color(Color? color) {
     assert(noteBeingEdited != null);
-    noteBeingEdited!.color = color;
+    noteBeingEdited!.color = color!;
     notifyListeners();
   }
 
