@@ -67,5 +67,7 @@ class NotesModel extends Model {
     notifyListeners();
   }
 
+  void deleteNote(Note note) {}
+
 }
 

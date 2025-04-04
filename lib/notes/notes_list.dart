@@ -1,10 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'notes_model.dart';
 
 class NotesList extends StatelessWidget {
   const NotesList({super.key});
+
+  _deleteNote(BuildContext context, NotesModel model, Note note) {
+    return showDialog(
+        context : context,
+        barrierDismissible : false,
+        builder : (BuildContext alertContext) {
+          return AlertDialog(
+              title : Text('Delete Note'),
+              content : Text('Are you sure you want to delete ${note.title}?'),
+              actions : [
+                ElevatedButton(child : Text('Cancel'),
+                    onPressed: ()  => Navigator.of(alertContext).pop();
+                ),
+                ElevatedButton(child : Text('Delete'),
+                    onPressed : () {
+                      model.deleteNote(note);
+                      Navigator.of(alertContext).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              backgroundColor : Colors.red,
+                              duration : Duration(seconds : 2),
+                              content : Text('Note deleted')
+                          )
+                      );
+                    }
+                )
+              ]
+          );
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +61,23 @@ class NotesList extends StatelessWidget {
                             )
                         )
                     );
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: Slidable(
+                      endActionPane: ActionPane(
+                      extentRatio: .25,
+                      motion: ScrollMotion(),
+                      children: <Widget>[
+                        SlidableAction(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          label: 'Delete',
+                          icon: Icons.delete,
+                          onPressed: (ctx) =>
+                              _deleteNote(context, model, note),
+                        )
+                      ],
+                    ),
                   }
               )
           );
