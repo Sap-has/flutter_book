@@ -16,7 +16,7 @@ class NotesList extends StatelessWidget {
               content : Text('Are you sure you want to delete ${note.title}?'),
               actions : [
                 ElevatedButton(child : Text('Cancel'),
-                    onPressed: ()  => Navigator.of(alertContext).pop();
+                    onPressed: ()  => Navigator.of(alertContext).pop()
                 ),
                 ElevatedButton(child : Text('Delete'),
                     onPressed : () {
@@ -51,33 +51,31 @@ class NotesList extends StatelessWidget {
                     Note note = model.noteList[index];
                     return Container(
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                        child: Card(
-                            elevation: 8,
-                            color: note.color,
-                            child: ListTile(
-                              title: Text(note.title ?? ''),
-                              subtitle: Text(note.content ?? ''),
-                              onTap: () => model.startEditingNote(note),
-                            )
+                        child: Slidable(
+                          endActionPane: ActionPane(
+                            extentRatio: .25,
+                            motion: ScrollMotion(),
+                            children: <Widget>[
+                              SlidableAction(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                label: 'Delete',
+                                icon: Icons.delete,
+                                onPressed: (ctx) => _deleteNote(context, model, note),
+                              )
+                            ],
+                          ),
+                          child: Card(
+                              elevation: 8,
+                              color: note.color,
+                              child: ListTile(
+                                title: Text(note.title ?? ''),
+                                subtitle: Text(note.content ?? ''),
+                                onTap: () => model.startEditingNote(note),
+                              )
+                          ),
                         )
                     );
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      child: Slidable(
-                      endActionPane: ActionPane(
-                      extentRatio: .25,
-                      motion: ScrollMotion(),
-                      children: <Widget>[
-                        SlidableAction(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          label: 'Delete',
-                          icon: Icons.delete,
-                          onPressed: (ctx) =>
-                              _deleteNote(context, model, note),
-                        )
-                      ],
-                    ),
                   }
               )
           );
