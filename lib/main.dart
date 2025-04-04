@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'notes/notes.dart'; // Add this import
 
 void main() {
   runApp(const FlutterBook());
@@ -48,9 +49,14 @@ class FlutterBook extends StatelessWidget {
                 .toList(),
             )
           ),
-          body: TabBarView(
-              children: _tabs.map((tab) => _Dummy(tab['name'] as String)).toList(),
-          )
+            body: TabBarView(
+              children: _tabs.map((tab) {
+                if (tab['name'] == 'Notes') {
+                  return const Notes();
+                }
+                return _Dummy(tab['name'] as String);
+              }).toList(),
+            )
         )
       )
     );

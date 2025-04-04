@@ -73,7 +73,12 @@ class NotesEntry extends StatelessWidget {
                   Border.all(width: 4,  color: model.color == color ? color : Theme.of(context).canvasColor)
           )
       ),
-      onTap: () => model.color = color as String?,
+      onTap: () {
+        if(model.noteBeingEdited != null) {
+          model.noteBeingEdited!.color = color;
+          model.notifyListeners();
+        }
+      },
     );
   }
 
@@ -135,5 +140,4 @@ class NotesEntry extends StatelessWidget {
         }
     );
   }
-
 }

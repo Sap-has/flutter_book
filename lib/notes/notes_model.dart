@@ -19,17 +19,16 @@ class Note {
     'purple': Colors.purple,
   };
 
-  String? get colorName {
+  String get colorName {
     for (var entry in _colorMap.entries) {
       if (entry.value == color) {
         return entry.key;
       }
     }
-    return null;
+    return 'white';
   }
 
-  set colorName(String? name) => color = _colorMap[name];
-
+  set colorName(String name) => color = _colorMap[name] ?? Colors.white;
 
 }
 
@@ -60,11 +59,11 @@ class NotesModel extends Model {
     stackIndex = 0; // navigate to list screen
   }
 
-  String? get color => noteBeingEdited?.color as String;
+  Color? get color => noteBeingEdited?.color;
 
-  set color(String? color) {
+  set color(Color? color) {
     assert(noteBeingEdited != null);
-    noteBeingEdited!.color = color as Color?;
+    noteBeingEdited!.color = color;
     notifyListeners();
   }
 
