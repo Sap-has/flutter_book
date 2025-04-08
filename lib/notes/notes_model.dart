@@ -49,8 +49,7 @@ class Notes extends StatelessWidget {
 }
 
 class NotesModel extends Model {
-
-  int _stackIndex = 0;  // 0 or 1  for list or entry screen
+  int _stackIndex = 0;  // 0 or 1 for list or entry screen
   final List<Note> noteList = [];
   Note? noteBeingEdited;
 
@@ -76,10 +75,15 @@ class NotesModel extends Model {
     stackIndex = 1; // navigate to entry screen
   }
 
-  void stopEditingNote({bool save=false}) {
-    if (save &&
-        !noteList.contains(noteBeingEdited!)) {
-      noteList.add(noteBeingEdited!);
+  void stopEditingNote({bool save=false}) async {
+    if (save) {
+      if (noteBeingEdited!.isNew) {
+        await database.create(noteBeingEdited!);
+      } else {
+        await database.update(noteBeingEdited!);
+      }
+      // Reload data from database to ensure UI is up to date
+      loadData();
     }
     noteBeingEdited = null;
     stackIndex = 0; // navigate to list screen
@@ -93,9 +97,11 @@ class NotesModel extends Model {
     notifyListeners();
   }
 
-  void deleteNote(Note note) {
+  void deleteNote(Note note) async {
+    if (!note.isNew) {
+      await database.delete(note.id!);
+    }
     noteList.remove(note);
     notifyListeners();
   }
 }
-
