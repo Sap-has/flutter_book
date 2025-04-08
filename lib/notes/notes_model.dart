@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'notes_db_worker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 final NotesModel notesModel = NotesModel();  // to be used by UI
 
 class Note {
+  int? id;
   String? title;
   String? content;
   Color color = Colors.white;
@@ -30,6 +32,20 @@ class Note {
 
   set colorName(String name) => color = _colorMap[name] ?? Colors.white;
 
+  Note({id = -1});
+  bool get isNew => id == -1;
+}
+
+class Notes extends StatelessWidget {
+  Notes() {
+    notesModel.loadData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 }
 
 class NotesModel extends Model {
@@ -39,6 +55,16 @@ class NotesModel extends Model {
   Note? noteBeingEdited;
 
   int get stackIndex => _stackIndex;
+
+  final NotesDBWorker database;
+
+  NotesModel(): database = NotesDBWorker.db;
+
+  void loadData() async {
+    noteList.clear();
+    noteList.addAll(await database.getAll());
+    notifyListeners();
+  }
 
   set stackIndex(int index) {
     _stackIndex = index;
