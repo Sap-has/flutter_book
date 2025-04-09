@@ -9,6 +9,9 @@ class Notes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize model and load data
+    notesModel.loadData();
+
     return ScopedModel<NotesModel>(
         model: notesModel,
         child: ScopedModelDescendant<NotesModel>(

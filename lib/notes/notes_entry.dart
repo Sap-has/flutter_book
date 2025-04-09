@@ -20,6 +20,32 @@ class NotesEntry extends StatelessWidget {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<NotesModel>(
+        builder: (BuildContext context, Widget? child, NotesModel model) {
+          _titleEditingController.text = model.noteBeingEdited?.title ?? '';
+          _contentEditingController.text = model.noteBeingEdited?.content ?? '';
+          return Scaffold(
+              bottomNavigationBar: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: _buildControlButtons(context, model)
+              ),
+              body: Form(
+                  key: _formKey,
+                  child: ListView(
+                      children: [
+                        _buildTitleListTile(),
+                        _buildContentListTile(),
+                        _buildColorListTile(context, model)
+                      ]
+                  )
+              )
+          );
+        }
+    );
+  }
+
   ListTile _buildTitleListTile() {
     return ListTile(
         leading: Icon(Icons.title),
@@ -72,16 +98,13 @@ class NotesEntry extends StatelessWidget {
               shape: Border.all(
                   width: 16,
                   color: color
-              ),
-              color: model.color == color ? color : Theme.of(context).canvasColor
+              ) + Border.all(
+                width: 4,
+                color: model.color == color ? color: Theme.of(context).canvasColor
+              )
           )
       ),
-      onTap: () {
-        if(model.noteBeingEdited != null) {
-          model.noteBeingEdited!.color = color;
-          model.notifyListeners();
-        }
-      },
+      onTap: () => model.color = color,
     );
   }
 
@@ -94,7 +117,7 @@ class NotesEntry extends StatelessWidget {
           model.stopEditingNote();
         },
       ),
-      Spacer(),
+      const Spacer(),
       ElevatedButton(
         child: Text('Save'),
         onPressed: () {
@@ -115,32 +138,6 @@ class NotesEntry extends StatelessWidget {
           backgroundColor: Colors.green,
           duration: Duration(seconds: 2), content: Text('Note saved'),
         )
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScopedModelDescendant<NotesModel>(
-        builder: (BuildContext context, Widget? child, NotesModel model) {
-          _titleEditingController.text = model.noteBeingEdited?.title ?? '';
-          _contentEditingController.text = model.noteBeingEdited?.content ?? '';
-          return Scaffold(
-              bottomNavigationBar: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  child: _buildControlButtons(context, model)
-              ),
-              body: Form(
-                  key: _formKey,
-                  child: ListView(
-                      children: [
-                        _buildTitleListTile(),
-                        _buildContentListTile(),
-                        _buildColorListTile(context, model)
-                      ]
-                  )
-              )
-          );
-        }
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'notes_model.dart';
 
 abstract interface class NotesDBWorker {
@@ -43,30 +44,36 @@ class _SQLiteNotesDBWorker implements NotesDBWorker {
 
   // Get the database instance, creating it if needed
   Future<Database> get database async {
-    if (_db == null) {
-      _db = await _initDatabase();
-    }
+    _db ??= await _initDatabase();
     return _db!;
   }
 
   // Initialize the database
   Future<Database> _initDatabase() async {
+    // Initialize databaseFactory for desktop platforms
+    if (defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, DB_NAME);
 
     return await openDatabase(
-        path,
-        version: 1,
-        onCreate: (Database db, int version) async {
-          await db.execute(
-              'CREATE TABLE $TBL_NOTES ('
-                  '$COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, '
-                  '$COL_TITLE TEXT, '
-                  '$COL_CONTENT TEXT, '
-                  '$COL_COLOR TEXT'
-                  ')'
-          );
-        }
+      path,
+      version: 1,
+      onCreate: (Database db, int version) async {
+        await db.execute(
+            'CREATE TABLE $TBL_NOTES ('
+                '$COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, '
+                '$COL_TITLE TEXT, '
+                '$COL_CONTENT TEXT, '
+                '$COL_COLOR TEXT'
+                ')'
+        );
+      },
     );
   }
 

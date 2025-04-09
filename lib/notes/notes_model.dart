@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'notes_db_worker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-final NotesModel notesModel = NotesModel();  // to be used by UI
+final NotesModel notesModel = NotesModel();
 
 class Note {
   int? id;
@@ -34,18 +34,6 @@ class Note {
 
   Note({id = -1});
   bool get isNew => id == -1;
-}
-
-class Notes extends StatelessWidget {
-  Notes() {
-    notesModel.loadData();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
 }
 
 class NotesModel extends Model {
