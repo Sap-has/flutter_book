@@ -1,11 +1,11 @@
 {
-    "name": "flutterbook",
-    "short_name": "flutterbook",
+    "name": "Flutter Book",
+    "short_name": "FlutterBook",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A comprehensive personal information manager with notes, appointments, contacts, and tasks.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

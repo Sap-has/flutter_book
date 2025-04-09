@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform, kIsWeb;
+import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'notes_model.dart';
+import 'notes_db_worker_web.dart' if (dart.library.io) 'notes_db_worker_mobile.dart';
 
 abstract interface class NotesDBWorker {
   // Factory constructor to return the database instance
-  static final NotesDBWorker db = _SQLiteNotesDBWorker._();
+  static final NotesDBWorker db = createNotesDBWorker();
 
   /// Create and add the given note in this database
   Future<int> create(Note note);
@@ -40,7 +42,7 @@ class _SQLiteNotesDBWorker implements NotesDBWorker {
   // Database instance variable
   Database? _db;
 
-  _SQLiteNotesDBWorker._();
+  _SQLiteNotesDBWorker();
 
   // Get the database instance, creating it if needed
   Future<Database> get database async {
@@ -51,9 +53,9 @@ class _SQLiteNotesDBWorker implements NotesDBWorker {
   // Initialize the database
   Future<Database> _initDatabase() async {
     // Initialize databaseFactory for desktop platforms
-    if (defaultTargetPlatform == TargetPlatform.windows ||
+    if (!kIsWeb && (defaultTargetPlatform == TargetPlatform.windows ||
         defaultTargetPlatform == TargetPlatform.linux ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
+        defaultTargetPlatform == TargetPlatform.macOS)) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
     }
