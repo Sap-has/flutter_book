@@ -3,14 +3,12 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform, kIsWeb;
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'notes_model.dart';
-import 'notes_db_worker_web.dart' if (dart.library.io) 'notes_db_worker_mobile.dart';
 
 abstract interface class NotesDBWorker {
   // Factory constructor to return the database instance
-  static final NotesDBWorker db = createNotesDBWorker();
+  static final NotesDBWorker db = _SQLiteNotesDBWorker();
 
   /// Create and add the given note in this database
   Future<int> create(Note note);
@@ -82,9 +80,9 @@ class _SQLiteNotesDBWorker implements NotesDBWorker {
   // Convert a Note object to a map for database operations
   Map<String, dynamic> _noteToMap(Note note) {
     Map<String, dynamic> map = <String, dynamic>{};
-    map[COL_TITLE] = note.title;
-    map[COL_CONTENT] = note.content;
-    map[COL_COLOR] = note.colorName;
+    map[COL_TITLE] = note.title ?? ''; // Provide empty string instead of null
+    map[COL_CONTENT] = note.content ?? ''; // Provide empty string instead of null
+    map[COL_COLOR] = note.colorName; // This should never be null as it has a default value
     return map;
   }
 

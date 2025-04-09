@@ -33,7 +33,7 @@ class Note {
   set colorName(String name) => color = _colorMap[name] ?? Colors.white;
 
   Note({id = -1});
-  bool get isNew => id == -1;
+  bool get isNew => id == null || id == -1;
 }
 
 class NotesModel extends Model {
@@ -64,14 +64,23 @@ class NotesModel extends Model {
   }
 
   void stopEditingNote({bool save=false}) async {
-    if (save) {
-      if (noteBeingEdited!.isNew) {
-        await database.create(noteBeingEdited!);
-      } else {
-        await database.update(noteBeingEdited!);
+    if (save && noteBeingEdited != null) {
+      // Ensure we have valid values before saving
+      noteBeingEdited!.title = noteBeingEdited!.title ?? '';
+      noteBeingEdited!.content = noteBeingEdited!.content ?? '';
+
+      try {
+        if (noteBeingEdited!.isNew) {
+          await database.create(noteBeingEdited!);
+        } else {
+          await database.update(noteBeingEdited!);
+        }
+        // Reload data from database to ensure UI is up to date
+        loadData();
+      } catch (e) {
+        print('Error saving note: $e');
+        // You might want to handle errors more gracefully here
       }
-      // Reload data from database to ensure UI is up to date
-      loadData();
     }
     noteBeingEdited = null;
     stackIndex = 0; // navigate to list screen
