@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'notes/notes.dart';
+import 'tasks/tasks.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +66,9 @@ class FlutterBook extends StatelessWidget {
                   children: _tabs.map((tab) {
                     if (tab['name'] == 'Notes') {
                       return const Notes();
+                    }
+                    if (tab['name'] == 'Tasks') {
+                      return const Tasks();
                     }
                     return _Dummy(tab['name'] as String);
                   }).toList(),
