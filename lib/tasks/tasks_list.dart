@@ -34,7 +34,7 @@ class TasksList extends StatelessWidget {
                                     foregroundColor: Colors.white,
                                     label: 'Delete',
                                     icon: Icons.delete,
-                                    onPressed: task.delete,
+                                    onPressed: (context) => task.delete(context),
                                   )
                                 ],
                               ),

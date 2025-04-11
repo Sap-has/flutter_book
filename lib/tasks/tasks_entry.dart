@@ -96,6 +96,7 @@ class TasksEntry extends StatelessWidget {
       return;
     }
 
+    model.entryBeingEdited!.description = _descriptionEditingController.text;
     model.stopEditingEntry(save: true);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -1,5 +1,6 @@
 import 'package:flutterbook/base_model.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform, kIsWeb;
 import 'tasks_model.dart';
 
 class TasksDBWorker implements EntryDBWorker<Task> {
@@ -19,6 +20,13 @@ class TasksDBWorker implements EntryDBWorker<Task> {
   Future<Database> get database async => _db ??= await _init();
 
   Future<Database> _init() async {
+    if (!kIsWeb && (defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.macOS)) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+
     return await openDatabase(DB_Name,
         version: 1,
         onOpen: (db) {},
@@ -28,7 +36,7 @@ class TasksDBWorker implements EntryDBWorker<Task> {
                   '$KEY_ID INTEGER PRIMARY KEY,'
                   '$KEY_DESCRIPTION TEXT,'
                   '$KEY_DUE_DATE INTEGER,'
-                  '$KEY_COMPLETED INTEGER,'
+                  '$KEY_COMPLETED INTEGER'
                   ')'
           );
         }

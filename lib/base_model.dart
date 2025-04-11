@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:universal_html/js_util.dart';
 
 abstract class BaseModel<T extends Entry> extends Model {
   static const int STACK_INDEX_LIST_VIEW = 0;
