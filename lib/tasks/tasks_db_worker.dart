@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutterbook/base_model.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform, kIsWeb;
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'tasks_model.dart';
 
 class TasksDBWorker implements EntryDBWorker<Task> {
@@ -26,6 +30,9 @@ class TasksDBWorker implements EntryDBWorker<Task> {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
     }
+
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, DB_Name);
 
     return await openDatabase(DB_Name,
         version: 1,

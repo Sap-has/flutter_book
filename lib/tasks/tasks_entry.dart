@@ -83,9 +83,12 @@ class TasksEntry extends StatelessWidget {
   }
 
   Future<void> _editDueDate(BuildContext context, TasksModel model) async {
+    String currentDescription = _descriptionEditingController.text;
+
     DateTime? chosenDate = await _selectDate(context,
         model.entryBeingEdited!.dueDate);
     if(chosenDate != null) {
+      model.entryBeingEdited!.description = currentDescription;
       model.entryBeingEdited!.dueDate = chosenDate;
       model.refreshUI();
     }
