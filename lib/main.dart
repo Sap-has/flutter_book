@@ -5,6 +5,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'notes/notes.dart';
 import 'tasks/tasks.dart';
 import 'appointments/appointments.dart';
+import 'habits/habits.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -45,6 +46,7 @@ class FlutterBook extends StatelessWidget {
     {'icon': Icons.contacts, 'name': 'Contacts'},
     {'icon': Icons.note, 'name': 'Notes'},
     {'icon': Icons.assignment_turned_in, 'name': 'Tasks'},
+    {'icon': Icons.fitbit, 'name': 'Habits'}
   ];
 
   @override
@@ -83,6 +85,9 @@ class FlutterBook extends StatelessWidget {
                     }
                     if (tab['name'] == 'Appointments') {
                       return const Appointments();
+                    }
+                    if(tab['name'] == 'Habits') {
+                      return const Habits();
                     }
                     return _Dummy(tab['name'] as String);
                   }).toList(),
