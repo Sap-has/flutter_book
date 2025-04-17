@@ -13,7 +13,7 @@ class NotesList extends StatelessWidget {
           return Scaffold(
               floatingActionButton: FloatingActionButton(
                   child: Icon(Icons.add, color: Colors.white),
-                  onPressed: () => model.startEditingNote(Note())),
+                  onPressed: () => model.startEditingNote(Note(color: Colors.white))),
               body: ListView.builder(
                   itemCount: model.noteList.length,
                   itemBuilder: (BuildContext context, int index) {

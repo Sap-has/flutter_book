@@ -6,16 +6,26 @@ import 'notes/notes.dart';
 import 'tasks/tasks.dart';
 import 'appointments/appointments.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize FFI for desktop platforms
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     sqfliteFfiInit();
   }
 
   runApp(const FlutterBook());
 }
+
 
 class _Dummy extends StatelessWidget {
   final String _title;

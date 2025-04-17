@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'notes_db_worker.dart';
+import 'notes_firestore_worker.dart';
+import '../base_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 final NotesModel notesModel = NotesModel();
 
-class Note {
-  int? id;
+class Note extends Entry{
   String? title;
   String? content;
   Color color = Colors.white;
@@ -32,7 +32,7 @@ class Note {
 
   set colorName(String name) => color = _colorMap[name] ?? Colors.white;
 
-  Note({id = -1});
+  Note({super.id = Entry.NO_ID, this.title, this.content, required this.color});
   bool get isNew => id == null || id == -1;
 }
 
@@ -43,9 +43,9 @@ class NotesModel extends Model {
 
   int get stackIndex => _stackIndex;
 
-  final NotesDBWorker database;
+  final FirestoreNotesWorker database;
 
-  NotesModel(): database = NotesDBWorker.db;
+  NotesModel(): database = FirestoreNotesWorker.db;
 
   void loadData() async {
     noteList.clear();

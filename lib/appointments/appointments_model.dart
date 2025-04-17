@@ -1,11 +1,11 @@
 import 'package:intl/intl.dart';
 import '../base_model.dart';
-import 'appointments_db_worker.dart';
+import 'appointments_firestore_worker.dart';
 
 AppointmentsModel appointmentsModel = AppointmentsModel();
 
 class AppointmentsModel extends BaseModel<Appointment> {
-  AppointmentsModel(): super(AppointmentsDBWorker.db);
+  AppointmentsModel(): super(FirestoreAppointmentsWorker.db);
 
   List<Appointment> appointmentsOn(DateTime date) =>
       entryList.where((app) => app.isOnDate(date)).toList();

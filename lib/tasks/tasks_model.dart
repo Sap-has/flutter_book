@@ -1,11 +1,11 @@
 
 import '../base_model.dart';
-import 'tasks_db_worker.dart';
+import 'tasks_firestore_worker.dart';
 
 TasksModel tasksModel = TasksModel();
 
 class TasksModel extends BaseModel<Task> {
-  TasksModel(): super(TasksDBWorker.db);
+  TasksModel(): super(FirestoreTasksWorker.db);
 
   Future<void> updateEntry(Task task) async {
     await database.update(task);
